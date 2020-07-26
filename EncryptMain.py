@@ -11,25 +11,31 @@ root_m = None
 
 image_merge = PhotoImage(file=str(pathlib.Path().absolute()) + "\images\merge.png")
 image_merge_encrypt = PhotoImage(file=str(pathlib.Path().absolute()) + "\images\merge_encrypt.png")
+image_icon ="images\WinIcon.ico"
 
 #Function for the Main-GUI
 def GUI():
+    #Mainwindow settings
     root_main.title("PDF-Merger")
     root_main.geometry("310x200")
     root_main.resizable(False,False)
+    root_main.iconbitmap(image_icon)
 
+    #MergeButton Frame
     m_frame = LabelFrame(root_main)
     m_frame.grid(column =1, row = 2)
-
+    #MergeEncryptButton Frame
     me_frame = LabelFrame(root_main)
     me_frame.grid(column = 2, row = 2)
 
+    #Textlabel for Options
     Option_text = Label(text="Choose an option:")
     Option_text.grid(column=1, row=1, columnspan=2)
     f_option = font.Font(Option_text, Option_text.cget("font"))
     f_option.configure(weight="bold" )
     Option_text.configure(font=f_option)
 
+    #Creator Textlabel with Hyperlink to Github of Creator
     creator = Label(root_main, text= "Created by RibelH",fg="blue")
     f = font.Font(creator, creator.cget("font"))
     f.configure(underline=True)
@@ -37,11 +43,15 @@ def GUI():
     creator.bind("<Button-1>", open_github)
     creator.grid(column = 1, row = 3, columnspan = 2)
 
+    #Merge Button
+    b = Button(m_frame, command=lambda: GUI_Merge(), height=150, width=145, image=image_merge, bg="#378dae",
+               activebackground="#3d9dc2")
+    #Merge & Encrypt Button
     b_encrypt = Button(me_frame,command= lambda: GUI_Merge_encrypt()  ,height=150, width=145,image = image_merge_encrypt,
                bg="#378dae", activebackground="#3d9dc2")
-    b = Button(m_frame,command = lambda: GUI_Merge(), height =150, width=145, image=image_merge, bg="#378dae", activebackground="#3d9dc2")
 
 
+    #Display Buttons in root_main
     b_encrypt.pack()
     b.pack()
 
@@ -50,13 +60,13 @@ def GUI():
 # GUI for Merge and Encrypt Function
 def GUI_Merge_encrypt():
     global root_me
-    global output
+    global status
     root_me = Toplevel()
     root_me.title("PDF-Merge-Encrypt")
     root_me.geometry("400x275")
     root_me.resizable(False, False)
     #Status update label
-    output = Label(root_me, text="", fg="white")
+    status = Label(root_me, text="", fg="white")
     #Textfield  PDF name
     information_text = Label(root_me, text="Name des zusammengefügten PDFs:")
     information_text.pack(side=TOP)
@@ -78,13 +88,13 @@ def GUI_Merge_encrypt():
 # GUI for Merge function
 def GUI_Merge():
     global root_m
-    global output
+    global status
     root_m = Toplevel()
     root_m.title("PDF-Merge")
     root_m.geometry("300x230")
     root_m.resizable(False, False)
     #Status update label
-    output = Label(root_m, text="", fg="white")
+    status = Label(root_m, text="", fg="white")
     #Textfield PDF name
     information_text = Label(root_m, text="Name des zusammengefügten PDFs:",)
     information_text.pack(side=TOP)
@@ -102,7 +112,7 @@ def GUI_Merge():
 
 
 #Label das sich updated und den User über den Status des Programms informiert
-output = Label(root_main, text="", fg="white")
+status = Label(root_main, text="", fg="white")
 
 #Funktion fügt PDF Dokumente zusammen und verschlüsselt diese
 def merge_encrypt_pdfs(result_doc, pwd):
@@ -170,11 +180,11 @@ def merge_pdfs(result_doc):
     except:
         change_label("Keine Dateien ausgewählt.", "red")
         os.remove(result_doc)
-#Aktualisiert Status des "output" Labels
-def change_label(output_text, color):
-    output["text"]= output_text
-    output["fg"]= color
-    output.pack(side=BOTTOM)
+#Fuction to Refresh status label
+def change_label(status_text, color):
+    status["text"]= status_text
+    status["fg"]= color
+    status.pack(side=BOTTOM)
 #Open GIT-Hub of creator
 def open_github(event):
     webbrowser.open("https://github.com/RibelH")
