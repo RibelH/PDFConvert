@@ -17,26 +17,27 @@ image_icon ="images\WinIcon.ico"
 def GUI():
     #Mainwindow settings
     root_main.title("PDF-Merger")
-    root_main.geometry("310x200")
+    root_main.geometry("310x220")
     root_main.resizable(False,False)
     root_main.iconbitmap(image_icon)
+    root_main.configure(background="white")
 
     #MergeButton Frame
-    m_frame = LabelFrame(root_main)
+    m_frame = LabelFrame(root_main, text ="Merge", labelanchor ="n",background="white")
     m_frame.grid(column =1, row = 2)
     #MergeEncryptButton Frame
-    me_frame = LabelFrame(root_main)
+    me_frame = LabelFrame(root_main,  text ="Merge & Encrypt",labelanchor="n",background="white" )
     me_frame.grid(column = 2, row = 2)
 
     #Textlabel for Options
-    Option_text = Label(text="Choose an option:")
+    Option_text = Label(text="Choose an option:",background="white")
     Option_text.grid(column=1, row=1, columnspan=2)
     f_option = font.Font(Option_text, Option_text.cget("font"))
     f_option.configure(weight="bold" )
     Option_text.configure(font=f_option)
 
     #Creator Textlabel with Hyperlink to Github of Creator
-    creator = Label(root_main, text= "Created by RibelH",fg="blue")
+    creator = Label(root_main, text= "Created by RibelH",fg="blue",bg="white")
     f = font.Font(creator, creator.cget("font"))
     f.configure(underline=True)
     creator.configure(font=f)
