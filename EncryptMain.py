@@ -1,4 +1,5 @@
 import webbrowser
+import threading
 from tkinter import *
 from tkinter import font
 from tkinter import filedialog
@@ -21,6 +22,7 @@ def GUI():
     root_main.resizable(False,False)
     root_main.iconbitmap(image_icon)
     root_main.configure(background="white")
+
 
     #MergeButton Frame
     m_frame = LabelFrame(root_main, text ="Merge", labelanchor ="n",background="white")
@@ -79,7 +81,8 @@ def GUI_Merge_encrypt():
     pwd_input =Entry(root_me, bd=5)
     pwd_input.pack(side=TOP)
 
-    me = Button(root_me, command=lambda: merge_encrypt_pdfs(name_input.get() + ".pdf", pwd_input.get()), height=150, width=145,
+
+    me = Button(root_me, command=lambda: threading.Thread(target=merge_encrypt_pdfs, args=[name_input.get() + ".pdf", pwd_input.get()]).start(), height=150, width=145,
                 image=image_merge_encrypt, bg="#378dae", activebackground="#3d9dc2")
     me.pack(pady=2)
 
@@ -90,6 +93,7 @@ def GUI_Merge_encrypt():
 def GUI_Merge():
     global root_m
     global status
+
     root_m = Toplevel()
     root_m.title("PDF-Merge")
     root_m.geometry("300x230")
@@ -104,6 +108,8 @@ def GUI_Merge():
     #Merge Button
     m = Button(root_m, command = lambda: merge_pdfs(name_input.get()+".pdf"),height =150, width=145, image=image_merge, bg="#378dae", activebackground="#3d9dc2")
     m.pack(pady=2)
+
+
 
     root_m.mainloop()
 
@@ -141,7 +147,7 @@ def merge_encrypt_pdfs(result_doc, pwd):
         if pwd != "":
             change_label("Dokument wird gerade verschlüsselt.....", "black")
             pdf_writer.encrypt(user_pwd=pwd, use_128bit=True)
-        with open(result_doc , "wb") as out:
+        with open("Merged&Encrypted Documents\\"+result_doc , "wb") as out:
             if pdf_reader.getNumPages() !=0:
                 if pwd != "":
                     change_label("Erfolgreich als "+ result_doc + " zusammengefügt und verschlüsselt!", "green")
@@ -170,7 +176,7 @@ def merge_pdfs(result_doc):
             for page in range(pdf_reader.getNumPages()):
                 pdf_writer.addPage(pdf_reader.getPage(page))
 
-        with open(result_doc , "wb") as out:
+        with open("Merged Documents\\"+ result_doc , "wb") as out:
             if pdf_reader.getNumPages() !=0:
 
                 change_label("Erfolgreich als " + result_doc + " zusammengefügt!", "green")
@@ -192,4 +198,5 @@ def open_github(event):
 
 
 #Start Programm
+
 GUI()
