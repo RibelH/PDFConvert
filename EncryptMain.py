@@ -3,7 +3,7 @@ import threading
 from tkinter import *
 from tkinter import font
 from tkinter import filedialog
-from PyPDF2 import PdfFileReader, PdfFileWriter
+from PyPDF2 import PdfReader, PdfWriter
 import os
 import pathlib
 root_main = Tk()
@@ -134,21 +134,21 @@ def merge_encrypt_pdfs(result_doc, pwd):
             change_label("Kein Passwort eingegeben","red")
             return
 
-        pdf_writer = PdfFileWriter()
+        pdf_writer = PdfWriter()
 
         files = filedialog.askopenfilenames(parent=root_me, title="PDFs auswählen!")
 
         for file in root_main.tk.splitlist(files):
-            pdf_reader = PdfFileReader(file)
-            for page in range(pdf_reader.getNumPages()):
-                pdf_writer.addPage(pdf_reader.getPage(page))
+            pdf_reader = PdfReader(file)
+            for page in range(len(pdf_reader.pages)):
+                pdf_writer.add_page(pdf_reader.pages[page-1])
 
 
         if pwd != "":
             change_label("Dokument wird gerade verschlüsselt.....", "black")
             pdf_writer.encrypt(user_pwd=pwd, use_128bit=True)
         with open("Merged&Encrypted Documents\\"+result_doc , "wb") as out:
-            if pdf_reader.getNumPages() !=0:
+            if len(pdf_reader.pages) !=0:
                 if pwd != "":
                     change_label("Erfolgreich als "+ result_doc + " zusammengefügt und verschlüsselt!", "green")
                 else:
@@ -167,17 +167,17 @@ def merge_pdfs(result_doc):
         if result_doc ==".pdf":
             change_label("Keinen Namen eigegeben","red")
             return
-        pdf_writer = PdfFileWriter()
+        pdf_writer = PdfWriter()
 
         files = filedialog.askopenfilenames(parent=root_m, title="PDFs auswählen!")
 
         for file in root_main.tk.splitlist(files):
-            pdf_reader = PdfFileReader(file)
-            for page in range(pdf_reader.getNumPages()):
-                pdf_writer.addPage(pdf_reader.getPage(page))
+            pdf_reader = PdfReader(file)
+            for page in range(len(pdf_reader.pages)):
+                pdf_writer.add_page(pdf_reader.pages[page])
 
         with open("Merged Documents\\"+ result_doc , "wb") as out:
-            if pdf_reader.getNumPages() !=0:
+            if len(pdf_reader.pages) !=0:
 
                 change_label("Erfolgreich als " + result_doc + " zusammengefügt!", "green")
             else:
